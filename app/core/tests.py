@@ -7,7 +7,10 @@ from psycopg2 import OperationalError as Psycopg2OpError
 
 from django.core.management import call_command
 from django.db.utils import OperationalError
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
+from django.contrib.auth import get_user_model
+
+
 
 
 @patch('core.management.commands.wait_for_db.Command.check')
@@ -32,3 +35,19 @@ class CommandTests(SimpleTestCase):
 
         self.assertEqual(patched_check.call_count, 6)
         patched_check.assert_called_with(databases=['default'])
+
+
+class ModelTests(TestCase):
+    """Test models."""
+
+    def test_create_user_with_email_successful(self):
+        """Test creating a user with an email is successful."""
+        email = 'test@example.com'
+        password = 'testpass123'
+        user = get_user_model().objects.create_user(
+            email=email,
+            password=password,
+        )
+
+        self.assertEqual(user.email, email)
+        self.assertTrue(user.check_password(password))
