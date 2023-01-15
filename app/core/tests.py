@@ -11,8 +11,6 @@ from django.test import SimpleTestCase, TestCase
 from django.contrib.auth import get_user_model
 
 
-
-
 @patch('core.management.commands.wait_for_db.Command.check')
 class CommandTests(SimpleTestCase):
     """Test commands."""
